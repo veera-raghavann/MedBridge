@@ -29,4 +29,36 @@ export class GmailService {
     });
     return response.data.messages || [];
   }
+
+  /**
+   * Send a plain-text email using the Gmail API. Requires the oauth client to have a valid
+   * refresh_token with the https://www.googleapis.com/auth/gmail.send scope.
+   */
+  async sendEmail(to: string, subject: string, body: string) {
+    const gmail = this.getGmailClient();
+
+    const messageLines = [
+      `From: me`,
+      `To: ${to}`,
+      `Subject: ${subject}`,
+      'MIME-Version: 1.0',
+      'Content-Type: text/plain; charset="UTF-8"',
+      '',
+      body,
+    ];
+
+    const message = messageLines.join('\r\n');
+    const encoded = Buffer.from(message)
+      .toString('base64')
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=+$/, '');
+
+    const res = await gmail.users.messages.send({
+      userId: 'me',
+      requestBody: { raw: encoded },
+    });
+
+    return res.data;
+  }
 }
