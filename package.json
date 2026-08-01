@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "My awesome MCP server",
+  "description": "Consent-gated MedBridge MCP server for secure healthcare record reconciliation", 
   "scripts": {
     "dev": "nitrostack-cli dev",
     "build": "nitrostack-cli build",
