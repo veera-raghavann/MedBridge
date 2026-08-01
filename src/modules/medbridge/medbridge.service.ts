@@ -239,7 +239,7 @@ function maskMobile(mobile: string): string {
 @Injectable()
 export class MedBridgeService {
   private patients: Patient[] = [
-    { patientId: 'P001', name: 'Arjun Rao', abhaId: '14-2233-4455-6677', mobile: '+91 9845012233', email: 'arjun.rao.demo@example.com' },
+    { patientId: 'P001', name: 'Arjun Rao', abhaId: '14-2233-4455-6677', mobile: '+91 9845012233', email: 'nafeesnassar123@gmail.com' },
     { patientId: 'P002', name: 'Meena Iyer', abhaId: '14-9988-7766-5544', mobile: '+91 9902213344', email: 'meena.iyer.demo@example.com' },
     { patientId: 'P003', name: 'Divya Krishnan', abhaId: '14-1122-3344-5566', mobile: '+91 9741199887', email: 'divya.krishnan.demo@example.com' },
   ];
@@ -454,16 +454,17 @@ export class MedBridgeService {
       const port = Number(process.env.SMTP_PORT ?? 587);
       const user = process.env.SMTP_USER ?? process.env.GMAIL_USER;
       const pass = process.env.SMTP_PASS ?? process.env.GMAIL_PASS;
+      const from = process.env.SMTP_FROM ?? process.env.GMAIL_FROM ?? 'veeraraghavan.manage@gmail.com';
       if (!user || !pass) {
         // Credentials not configured — log the intended message instead of failing.
         // eslint-disable-next-line no-console
-        console.info(`SMTP not configured; would send email to ${to}: ${subject}\n${text}`);
+        console.info(`SMTP not configured; would send email from ${from} to ${to}: ${subject}\n${text}`);
         return;
       }
       const transporter = nodemailer.createTransport({ host, port, secure: port === 465, auth: { user, pass } });
-      await transporter.sendMail({ from: user, to, subject, text });
+      await transporter.sendMail({ from, to, subject, text });
       // eslint-disable-next-line no-console
-      console.info(`Sent email to ${to}`);
+      console.info(`Sent email to ${to} from ${from}`);
     } catch (err) {
       // eslint-disable-next-line no-console
       console.error('sendEmail error', err);
